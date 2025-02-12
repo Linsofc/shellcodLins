@@ -47,5 +47,5 @@ systemctl reset-failed wings && systemctl restart wings
 
 echo -e "${CYAN}===================================="
 echo -e "✅ ${GREEN}Proses selesai! Semua layanan diperbarui.${NC}"
-echo -e "🔗 ${YELLOW}Follow: https://linsofc.github.io${NC}"
+echo -e "🔗 ${YELLOW}Website: https://linsofc.github.io${NC}"
 echo -e "===================================="
