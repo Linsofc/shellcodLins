@@ -15,7 +15,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Update dan install dependensi yang dibutuhkan
-echo -e "${BLUE}[INFO] Memeriksa dependensi...${RESET}"
+echo -e "${BLUE}[INFO] Memeriksa dependensi ...${RESET}"
 apt update -qq && apt install -y -qq curl neofetch || {
     echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
     exit 1
@@ -27,6 +27,10 @@ clear
 # Menampilkan informasi sistem dengan neofetch
 echo -e "${CYAN}[INFO] Menampilkan informasi sistem...${RESET}"
 neofetch --ascii_distro Debian --disable title uptime shell resolution de wm de_theme wm_theme icons terminal terminal_font gpu disk
+
+# Tunggu sejenak agar informasi sistem terbaca sebelum lanjut
+sleep 2
+echo -e "\n"
 
 # Lanjutkan ke tampilan informasi Lins Official
 echo -e "${GREEN}============================================${RESET}"
@@ -40,3 +44,6 @@ echo -e "${YELLOW}Website Resmi:${RESET} https://linsofc.github.io"
 echo -e "${RED}============================================${RESET}"
 echo -e "${RED}Harap berhati-hati terhadap akun palsu! Daftar di atas adalah akun resmi Lins Official.${RESET}"
 echo -e "${BLUE}© 2025${RESET}"
+
+# Jalankan perintah utama
+echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Nodejs...${RESET}"
