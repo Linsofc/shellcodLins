@@ -15,7 +15,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Update dan install dependensi yang dibutuhkan
-echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
+echo -e "${BLUE}[INFO] Memeriksa dependensi...${RESET}"
 apt update -qq && apt install -y -qq curl neofetch || {
     echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
     exit 1
@@ -24,14 +24,11 @@ apt update -qq && apt install -y -qq curl neofetch || {
 # Bersihkan layar sebelum menampilkan banner
 clear
 
-# Menampilkan informasi sistem dengan neofetch jika tersedia
-if command -v neofetch &> /dev/null; then
-    neofetch --ascii_distro Debian --disable title uptime shell resolution de wm de_theme wm_theme icons terminal terminal_font gpu disk
-else
-    echo -e "${YELLOW}[WARNING] Neofetch tidak ditemukan, melewati tampilan sistem.${RESET}"
-fi
+# Menampilkan informasi sistem dengan neofetch
+echo -e "${CYAN}[INFO] Menampilkan informasi sistem...${RESET}"
+neofetch --ascii_distro Debian --disable title uptime shell resolution de wm de_theme wm_theme icons terminal terminal_font gpu disk
 
-# Menampilkan informasi status
+# Lanjutkan ke tampilan informasi Lins Official
 echo -e "${GREEN}============================================${RESET}"
 echo -e "${GREEN}[ NodeJs Berhasil Diinstall ]${RESET}"
 echo -e "${CYAN}Created By Lins Official${RESET}"
@@ -43,11 +40,3 @@ echo -e "${YELLOW}Website Resmi:${RESET} https://linsofc.github.io"
 echo -e "${RED}============================================${RESET}"
 echo -e "${RED}Harap berhati-hati terhadap akun palsu! Daftar di atas adalah akun resmi Lins Official.${RESET}"
 echo -e "${BLUE}© 2025${RESET}"
-
-# Menjalankan Node.js (Jika Terpasang)
-if command -v node &> /dev/null; then
-    echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Nodejs...${RESET}"
-    node
-else
-    echo -e "${RED}[ERROR] Node.js tidak ditemukan, pastikan sudah terinstall.${RESET}"
-fi
