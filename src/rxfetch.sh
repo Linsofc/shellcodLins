@@ -11,11 +11,8 @@ RESET="\e[0m"
 # Pastikan script dijalankan sebagai root
 
 # Update dan install dependensi yang dibutuhkan
-echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
-apt update -qq && apt install -y -qq curl rxfetch || {
-    echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
-    exit 1
-}
+echo -e "\e[1;34m[INFO] Memperbarui paket dan menginstal dependensi...\e[0m"
+apt update && apt install -y curl rxfetch figlet lolcat nodejs npm yarn imagemagick python3 ffmpeg speedtest-cli pnpm pm2
 
 # Bersihkan layar sebelum menampilkan banner
 clear
