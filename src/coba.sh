@@ -115,7 +115,7 @@ echo -e "  ┃          ${c8}${c0}${c9}oo${c0}${c8}|${c0}         ┃  ${c7}ker$
 echo -e "  ┃         ${c8}/${c0}${c10} ${c0}${c8}'\'${c0}        ┃  ${c4}pkgs${c0}   ${packages}"
 echo -e "  ┃        ${c9}(${c0}${c8}\_;/${c0}${c9})${c0}        ┃  ${c5}sh${c0}     ${shell}"
 echo -e "  ┃                      ┃  ${c6}up${c0}    ${uptime}"
-echo -e "  ┃   Linsofc ${c1}${c0} Linux   ┃  ${c1}ram${c0}    ${memory}"
+echo -e "  ┃   Linsofc ${c1}${c0} Linux    ┃  ${c1}ram${c0}    ${memory}"
 echo -e "  ┃                      ┃  ${c2}disk${c0}   ${storage}"
 echo -e "  ┗━━━━━━━━━━━━━━━━━━━━━━┛  ${c1}━━━${c2}━━━${c3}━━━${c4}━━━${c5}━━━${c6}━━━${c7}━━━"
 echo -e "\n\n"
