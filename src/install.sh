@@ -9,14 +9,11 @@ RED="\e[1;31m"
 RESET="\e[0m"
 
 # Pastikan script dijalankan sebagai root
-if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}[ERROR] Jalankan script ini sebagai root atau gunakan sudo.${RESET}"
-    exit 1
-fi
 
-# Update repository dan install dependensi
-echo -e "${BLUE}[INFO] Mengupdate repository dan menginstall dependensi...${RESET}"
-apt update -qq && apt install -y -qq curl neofetch nodejs npm || {
+
+# Update dan install dependensi yang dibutuhkan
+echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
+apt update -qq && apt install -y -qq curl neofetch || {
     echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
     exit 1
 }
@@ -33,11 +30,7 @@ fi
 
 # Menampilkan informasi status
 echo -e "${GREEN}============================================${RESET}"
-if command -v node &> /dev/null; then
-    echo -e "${GREEN}[ NodeJs Berhasil Diinstall! ]${RESET}"
-else
-    echo -e "${RED}[ERROR] Node.js tidak ditemukan, pastikan sudah terinstall.${RESET}"
-fi
+echo -e "${GREEN}[ NodeJs Berhasil Diinstall ]${RESET}"
 echo -e "${CYAN}Created By Lins Official${RESET}"
 echo -e "${RED}=======[ SOSMED RESMI LINS OFFICIAL ]=======${RESET}"
 echo -e "${RED}YouTube:${RESET} https://youtube.com/@LinsOfficiall"
@@ -51,7 +44,7 @@ echo -e "${GREEN}============================================${RESET}"
 
 # Menjalankan Node.js (Jika Terpasang)
 if command -v node &> /dev/null; then
-    echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Node.js...${RESET}"
+    echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Nodejs...${RESET}"
 else
     echo -e "${RED}[ERROR] Node.js tidak ditemukan, pastikan sudah terinstall.${RESET}"
 fi
