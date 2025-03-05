@@ -9,10 +9,6 @@ RED="\e[1;31m"
 RESET="\e[0m"
 
 # Pastikan script dijalankan sebagai root
-if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}[ERROR] Jalankan script ini sebagai root atau gunakan sudo.${RESET}"
-    exit 1
-fi
 
 # Update dan install dependensi yang dibutuhkan
 echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
