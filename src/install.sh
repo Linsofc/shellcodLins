@@ -8,26 +8,24 @@ GREEN="\e[1;32m"
 RED="\e[1;31m"
 RESET="\e[0m"
 
-# Pastikan script dijalankan sebagai root
-
-# Update dan install dependensi yang dibutuhkan
-echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
-apt update -qq && apt install -y -qq curl neofetch || {
-    echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
+# Cek apakah neofetch terpasang
+if ! command -v neofetch &> /dev/null; then
+    echo -e "${RED}[ERROR] Neofetch tidak ditemukan! Silakan install dengan 'sudo apt install neofetch'${RESET}"
     exit 1
-}
+fi
 
 # Bersihkan layar sebelum menampilkan banner
 clear
 
-# Menampilkan informasi sistem dengan neofetch jika tersedia
-if command -v neofetch &> /dev/null; then
-    neofetch --ascii_distro Debian --disable title uptime shell resolution de wm de_theme wm_theme icons terminal terminal_font gpu disk
-else
-    echo -e "${YELLOW}[WARNING] Neofetch tidak ditemukan, melewati tampilan sistem.${RESET}"
-fi
+# Menampilkan informasi sistem dengan neofetch
+echo -e "${CYAN}[INFO] Menampilkan informasi sistem...${RESET}"
+neofetch --ascii_distro Debian --disable title uptime shell resolution de wm de_theme wm_theme icons terminal terminal_font gpu disk
 
-# Menampilkan informasi status
+# Tunggu sejenak agar informasi sistem terbaca sebelum lanjut
+sleep 2
+echo -e "\n"
+
+# Lanjutkan ke tampilan informasi Lins Official
 echo -e "${GREEN}============================================${RESET}"
 echo -e "${GREEN}[ NodeJs Berhasil Diinstall ]${RESET}"
 echo -e "${CYAN}Created By Lins Official${RESET}"
@@ -39,11 +37,6 @@ echo -e "${YELLOW}Website Resmi:${RESET} https://linsofc.github.io"
 echo -e "${RED}============================================${RESET}"
 echo -e "${RED}Harap berhati-hati terhadap akun palsu! Daftar di atas adalah akun resmi Lins Official.${RESET}"
 echo -e "${BLUE}© 2025${RESET}"
-echo -e "${GREEN}============================================${RESET}"
 
-# Menjalankan Node.js (Jika Terpasang)
-if command -v node &> /dev/null; then
-    echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Nodejs...${RESET}"
-else
-    echo -e "${RED}[ERROR] Node.js tidak ditemukan, pastikan sudah terinstall.${RESET}"
-fi
+# Jalankan perintah utama
+echo -e "${BLUE}[Linsofc] Sedang Menjalankan Aplikasi Nodejs...${RESET}"
