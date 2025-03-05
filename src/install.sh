@@ -17,9 +17,9 @@ echo -e "\e[1;33m[ NODE V.19 BERHASIL DI INSTALL ]\e[0m"
 echo -e "\e[1;32mSUDAH TERINSTALL:\e[0m YARN, IMAGEMAGICK, PYTHON, FFMPEG, SPEEDTEST, PNPM, PM2, NODEMON, TS-NODE, PUPPETEER"
 echo -e "\e[1;31mNB: HARAP BERHATI-HATI DALAM MEMBELI PANEL\e[0m"
 echo -e "\e[1;36mLIST PANEL LEGAL:\e[0m"
-echo -e "1. KANGYUD HOST (panel.kangyud.tech)"
+echo -e "1. Linsofc (panel.kangyud.tech)"
 echo -e "\e[1;31mSELAIN PANEL TERSEBUT, MERUPAKAN AKSES ILEGAL DAN DATA ANDA TIDAK TERJAMIN KEAMANANNYA!\e[0m"
-echo -e "\e[1;34mINFO: WHATSAPP 083155997772\e[0m"
+echo -e "\e[1;34mINFO: WHATSAPP 081911317205\e[0m"
 
 # Cek apakah PTEROIGNORE_URL tersedia
 if [ -n "$PTEROIGNORE_URL" ]; then
@@ -31,5 +31,3 @@ fi
 
 # Jalankan perintah utama
 echo -e "\e[1;34m[INFO] Menjalankan aplikasi Node.js...\e[0m"
-eval "${CMD_RUN}"
-
