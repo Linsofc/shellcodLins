@@ -8,18 +8,29 @@ GREEN="\e[1;32m"
 RED="\e[1;31m"
 RESET="\e[0m"
 
-# Pastikan script dijalankan sebagai root
+# Periksa apakah script dijalankan sebagai root
 if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}[ERROR] Jalankan script ini sebagai root atau gunakan sudo.${RESET}"
-    exit 1
+    echo -e "${YELLOW}[WARNING] Tidak berjalan sebagai root! Beberapa fitur mungkin tidak tersedia.${RESET}"
+    SUDO=""
+else
+    SUDO="sudo"
 fi
 
-# Update dan install dependensi yang dibutuhkan
-echo -e "${BLUE}[INFO] Menginstall dependensi...${RESET}"
-apt update -qq && apt install -y -qq curl neofetch || {
-    echo -e "${RED}[ERROR] Gagal menginstall dependensi.${RESET}"
-    exit 1
-}
+# Update dan install dependensi jika diperlukan
+echo -e "${BLUE}[INFO] Memeriksa dependensi...${RESET}"
+
+for pkg in curl neofetch; do
+    if ! command -v "$pkg" &> /dev/null; then
+        echo -e "${YELLOW}[WARNING] $pkg tidak ditemukan, mencoba menginstall...${RESET}"
+        if [[ -n "$SUDO" ]]; then
+            $SUDO apt update -qq && $SUDO apt install -y -qq "$pkg" || {
+                echo -e "${RED}[ERROR] Gagal menginstall $pkg.${RESET}"
+            }
+        else
+            echo -e "${RED}[ERROR] $pkg tidak terpasang dan tidak dapat diinstall tanpa root.${RESET}"
+        fi
+    fi
+done
 
 # Bersihkan layar sebelum menampilkan banner
 clear
