@@ -66,26 +66,23 @@ function getShell() {
 
 function getUptime() {
   if command -v uptime >/dev/null 2>&1; then
-    uptime="$(uptime -p | sed 's/up //')"
+    uptime="$(cut -d. -f1 /proc/uptime | awk '{hours=int($1/3600); mins=int(($1%3600)/60); print hours \"h \" mins \"m\"}')"
   else
-    uptime="Unavailable"
+    uptime="Tidak Tersedia"
   fi
 }
 
 function getMemoryUsage() {
-  if command -v free >/dev/null 2>&1; then
-    _GREP_ONE_ROW="$(free -m | grep Mem)"
-    if [ -n "${_GREP_ONE_ROW}" ]; then
-      _TOTAL="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
-      _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
-      memory="${_USED}MB / ${_TOTAL}MB"
-    else
-      memory="Unknown"
-    fi
+  if [ -r /proc/meminfo ]; then
+    _TOTAL=$(grep MemTotal /proc/meminfo | awk '{print int($2/1024)}')
+    _AVAILABLE=$(grep MemAvailable /proc/meminfo | awk '{print int($2/1024)}')
+    _USED=$((_TOTAL - _AVAILABLE))
+    memory="${_USED}MB / ${_TOTAL}MB"
   else
-    memory="Unavailable"
+    memory="Tidak Tersedia"
   fi
 }
+
 
 function getDiskUsage() {
   if command -v df >/dev/null 2>&1; then
