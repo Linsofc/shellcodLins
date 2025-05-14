@@ -65,10 +65,18 @@ function getShell() {
 }
 
 function getUptime() {
-  if command -v uptime >/dev/null 2>&1; then
-    uptime="$(cut -d. -f1 /proc/uptime | awk '{hours=int($1/3600); mins=int(($1%3600)/60); print hours \"h \" mins \"m\"}')"
+  if [ -r /proc/uptime ]; then
+    _SECONDS=$(cut -d. -f1 /proc/uptime)
+    _DAYS=$((_SECONDS / 86400))
+    _HOURS=$((_SECONDS % 86400 / 3600))
+    _MINUTES=$((_SECONDS % 3600 / 60))
+
+    uptime=""
+    [ $_DAYS -gt 0 ] && uptime="${_DAYS}d "
+    [ $_HOURS -gt 0 ] && uptime="${uptime}${_HOURS}h "
+    uptime="${uptime}${_MINUTES}m"
   else
-    uptime="Tidak Tersedia"
+    uptime="Unavailable"
   fi
 }
 
