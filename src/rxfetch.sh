@@ -24,15 +24,19 @@ c9=${bgyellow}
 c10=${bgwhite}
 
 function getCodeName() {
-  codename="$(getprop ro.product.board)"
+  if command -v getprop >/dev/null 2>&1; then
+    codename="$(getprop ro.product.board)"
+  else
+    codename="Unknown"
+  fi
 }
 
 function getClientBase() {
-  client_base="$(getprop ro.com.google.clientidbase)"
+  client_base="N/A"
 }
 
 function getModel() {
-  model="$(getprop ro.product.brand) $(getprop ro.product.model)"
+  model="Generic Linux"
 }
 
 function getDistro() {
