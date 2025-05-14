@@ -65,16 +65,23 @@ function getShell() {
 }
 
 function getUptime() {
-  uptime="$(uptime --pretty | sed 's/up//')"
+  if command -v uptime >/dev/null 2>&1; then
+    uptime="$(uptime -p | sed 's/up //')"
+  else
+    uptime="Unavailable"
+  fi
 }
 
 function getMemoryUsage() {
   if command -v free >/dev/null 2>&1; then
-    _MEM="Mem:"
-    _GREP_ONE_ROW="$(free --mega | grep "${_MEM}")"
-    _TOTAL="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
-    _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
-    memory="${_USED}MB / ${_TOTAL}MB"
+    _GREP_ONE_ROW="$(free -m | grep Mem)"
+    if [ -n "${_GREP_ONE_ROW}" ]; then
+      _TOTAL="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
+      _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
+      memory="${_USED}MB / ${_TOTAL}MB"
+    else
+      memory="Unknown"
+    fi
   else
     memory="Unavailable"
   fi
