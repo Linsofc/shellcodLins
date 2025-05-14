@@ -65,30 +65,50 @@ function getShell() {
 }
 
 function getUptime() {
-  uptime="$(uptime --pretty | sed 's/up//')"
+  if [ -r /proc/uptime ]; then
+    _SECONDS=$(cut -d. -f1 /proc/uptime)
+    _DAYS=$((_SECONDS / 86400))
+    _HOURS=$((_SECONDS % 86400 / 3600))
+    _MINUTES=$((_SECONDS % 3600 / 60))
+
+    uptime=""
+    [ $_DAYS -gt 0 ] && uptime="${_DAYS}d "
+    [ $_HOURS -gt 0 ] && uptime="${uptime}${_HOURS}h "
+    uptime=" ${uptime}${_MINUTES}m"
+  else
+    uptime="Unavailable"
+  fi
 }
 
 function getMemoryUsage() {
-  #memory="$(free --mega | sed -n -E '2s/^[^0-9]*([0-9]+) *([0-9]+).*/'"${space}"'\2 \/ \1MB/p')"
-  _MEM="Mem:"
-  _GREP_ONE_ROW="$(free --mega | grep "${_MEM}")"
-  _TOTAL="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
-  _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
-
-  memory="${_USED}MB / ${_TOTAL}MB"
+  if [ -r /proc/meminfo ]; then
+    _TOTAL=$(grep MemTotal /proc/meminfo | awk '{print int($2/1024)}')
+    _AVAILABLE=$(grep MemAvailable /proc/meminfo | awk '{print int($2/1024)}')
+    _USED=$((_TOTAL - _AVAILABLE))
+    memory="${_USED}MB / ${_TOTAL}MB"
+  else
+    memory="Tidak Tersedia"
+  fi
 }
+
 
 function getDiskUsage() {
-  _MOUNTED_ON="/data"
-  _GREP_ONE_ROW="$(df -h | grep ${_MOUNTED_ON})"
-  _SIZE="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
-  _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
-  _AVAIL="$(echo ${_GREP_ONE_ROW} | awk '{print $4}')"
-  _USE="$(echo ${_GREP_ONE_ROW} | awk '{print $5}' | sed 's/%//')"
-  _MOUNTED="$(echo ${_GREP_ONE_ROW} | awk '{print $6}')"
-
-  storage="${_USED}B / ${_SIZE}B = ${_AVAIL}B (${_USE}%)"
+  if command -v df >/dev/null 2>&1; then
+    _GREP_ONE_ROW="$(df -h | grep '\/$')"
+    if [ -n "${_GREP_ONE_ROW}" ]; then
+      _SIZE="$(echo ${_GREP_ONE_ROW} | awk '{print $2}')"
+      _USED="$(echo ${_GREP_ONE_ROW} | awk '{print $3}')"
+      _AVAIL="$(echo ${_GREP_ONE_ROW} | awk '{print $4}')"
+      _USE="$(echo ${_GREP_ONE_ROW} | awk '{print $5}' | sed 's/%//')"
+      storage="${_USED}B / ${_SIZE}B = ${_AVAIL}B (${_USE}%)"
+    else
+      storage="Mount not found"
+    fi
+  else
+    storage="Unavailable"
+  fi
 }
+
 
 function main() {
   getCodeName
