@@ -74,7 +74,7 @@ function getUptime() {
     uptime=""
     [ $_DAYS -gt 0 ] && uptime="${_DAYS}d "
     [ $_HOURS -gt 0 ] && uptime="${uptime}${_HOURS}h "
-    uptime="${uptime}${_MINUTES}m"
+    uptime=" ${uptime}${_MINUTES}m"
   else
     uptime="Unavailable"
   fi
