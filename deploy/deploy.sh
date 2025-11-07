@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # =================================================================
-# Skrip Konfigurasi Proyek Next.js (sbtopup) YANG SUDAH ADA
+# Skrip Konfigurasi Proyek Next.js YANG SUDAH ADA + Instalasi Penuh
 #
 # Dijalankan di server VPS (diasumsikan Ubuntu/Debian).
-# Mengasumsikan NVM, Node.js, PM2, Nginx, dan Certbot sudah terinstal.
+# Skrip ini akan menginstal NVM, Node.js, PM2, Nginx, dan Certbot.
 # =================================================================
 
 # Hentikan skrip jika ada perintah yang gagal
@@ -38,12 +38,13 @@ APP_PORT="3000"            # Port internal aplikasi Anda
 info "Memulai proses setup. Harap masukkan detail yang diperlukan."
 
 read -p "1. Masukkan nama domain Anda (misal: sbprint.linsofc.my.id): " DOMAIN_NAME
-read -p "2. Masukkan Nama Folder Proyek (yang ada di /var/www/): " PROJECT_DIR_NAME
-read -p "3. Masukkan Nama Aplikasi PM2 (misal: sbtopup-prod): " PM2_APP_NAME
+read -p "2. Masukkan email Anda (untuk notifikasi SSL/Certbot): " EMAIL_FOR_SSL
+read -p "3. Masukkan Nama Folder Proyek (yang ada di /var/www/): " PROJECT_DIR_NAME
+read -p "4. Masukkan Nama Aplikasi PM2 (misal: sbtopup-prod): " PM2_APP_NAME
 
 # Cek input
-if [ -z "$DOMAIN_NAME" ] || [ -z "$PROJECT_DIR_NAME" ] || [ -z "$PM2_APP_NAME" ]; then
-    error "Domain, Nama Folder, dan Nama PM2 tidak boleh kosong."
+if [ -z "$DOMAIN_NAME" ] || [ -z "$EMAIL_FOR_SSL" ] || [ -z "$PROJECT_DIR_NAME" ] || [ -z "$PM2_APP_NAME" ]; then
+    error "Domain, Email, Nama Folder, dan Nama PM2 tidak boleh kosong."
 fi
 
 # =================================================================
@@ -53,10 +54,35 @@ warn "PASTIKAN Anda telah mengarahkan A Record domain ${DOMAIN_NAME} ke IP serve
 read -p "Tekan [ENTER] jika Anda sudah melakukannya..."
 
 # =================================================================
-# LANGKAH 2: Peringatan Prasyarat
+# LANGKAH 2: Instalasi Prasyarat Server (Nginx, NVM, Node, PM2, Certbot)
 # =================================================================
-warn "Skrip ini mengasumsikan NVM, Node.js, PM2, Nginx, dan Certbot sudah terinstal."
-warn "Pastikan juga folder '${BASE_DIR}/${PROJECT_DIR_NAME}' sudah ada."
+info "Memperbarui paket dan menginstal dependensi (curl, git, nginx, snapd)..."
+apt-get update
+apt-get install -y curl git nginx snapd
+
+info "Menginstal NVM (Node Version Manager)..."
+# Diasumsikan skrip dijalankan sebagai root, NVM akan terinstal di /root/.nvm
+export NVM_DIR="$HOME/.nvm"
+if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+
+# Mengaktifkan NVM untuk sesi skrip ini
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+info "Menginstal Node.js versi LTS..."
+nvm install --lts
+nvm use --lts
+
+info "Menginstal PM2 secara global..."
+npm install -g pm2
+
+info "Menginstal Certbot..."
+snap install --classic certbot
+ln -s /snap/bin/certbot /usr/bin/certbot || true
+
+warn "Pastikan folder proyek '${BASE_DIR}/${PROJECT_DIR_NAME}' sudah Anda upload."
 read -p "Tekan [ENTER] untuk melanjutkan..."
 
 # =================================================================
@@ -74,10 +100,10 @@ cd "$PROJECT_PATH"
 warn "PASTIKAN file .env sudah ada dan terkonfigurasi di ${PROJECT_PATH}/.env"
 read -p "Tekan [ENTER] jika file .env sudah siap..."
 
-info "Mengaktifkan NVM (jika ada)..."
-# Mencoba mengaktifkan NVM. Gagal tidak akan menghentikan skrip.
+info "Mengaktifkan NVM (karena ini sesi baru)..."
+# Kita perlu mengaktifkan NVM lagi untuk memastikan perintah npm berjalan
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || warn "NVM tidak ditemukan, pastikan Node.js ada di PATH."
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || error "NVM tidak ditemukan. Instalasi mungkin gagal."
 
 info "Menginstal dependensi NPM..."
 npm install
@@ -144,9 +170,8 @@ info "Membersihkan file lock Certbot (jika ada)..."
 rm -f /var/lib/letsencrypt/.certbot.lock
 
 info "Meminta sertifikat SSL untuk ${DOMAIN_NAME}..."
-info "CATATAN: Silakan ikuti instruksi interaktif dari Certbot."
-# Jalankan Certbot secara INTERAKTIF (karena kita tidak meminta email)
-certbot --nginx -d "$DOMAIN_NAME"
+# Jalankan Certbot secara non-interaktif
+certbot --nginx --non-interactive --agree-tos -m "$EMAIL_FOR_SSL" -d "$DOMAIN_NAME"
 
 success "========= KONFIGURASI SELESAI! =========="
 echo "Proyek Anda (${PM2_APP_NAME}) sekarang berjalan."
