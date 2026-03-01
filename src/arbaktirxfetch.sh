@@ -60,22 +60,8 @@ function getTotalPackages() {
   esac
 }
 
-# function getInstalledTools() {
-#   tools=(git curl jq file unzip make gcc imagemagick ffmpeg g++ python3 python3-pip libtool npm)
-
-#   installed_list=""
-
-#   for tool in "${tools[@]}"; do
-#     if command -v $tool >/dev/null 2>&1; then
-#       installed_list+="$tool ✓  "
-#     else
-#       installed_list+="$tool ✗  "
-#     fi
-#   done
-# }
-
 function getInstalledTools() {
-  tools=(git curl jq file unzip make gcc ffmpeg g++ python3 python3-pip libtool npm)
+  tools=(git curl jq file unzip make gcc imagemagick ffmpeg g++ python3 python3-pip libtool npm)
 
   installed_list=""
 
@@ -86,15 +72,29 @@ function getInstalledTools() {
       installed_list+="$tool ✗  "
     fi
   done
-
-  if command -v convert >/dev/null 2>&1; then
-    installed_list+="convert ✓  "
-  elif command -v magick >/dev/null 2>&1; then
-    installed_list+="magick ✓  "
-  else
-    installed_list+="imagemagick ✗  "
-  fi
 }
+
+# function getInstalledTools() {
+#   tools=(git curl jq file unzip make gcc ffmpeg g++ python3 python3-pip libtool npm)
+
+#   installed_list=""
+
+#   for tool in "${tools[@]}"; do
+#     if command -v $tool >/dev/null 2>&1; then
+#       installed_list+="$tool ✓  "
+#     else
+#       installed_list+="$tool ✗  "
+#     fi
+#   done
+
+#   if command -v convert >/dev/null 2>&1; then
+#     installed_list+="convert ✓  "
+#   elif command -v magick >/dev/null 2>&1; then
+#     installed_list+="magick ✓  "
+#   else
+#     installed_list+="imagemagick ✗  "
+#   fi
+# }
 
 function getShell() {
   shell="$(basename $SHELL)"
