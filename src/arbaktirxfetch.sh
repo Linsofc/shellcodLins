@@ -61,9 +61,12 @@ function getTotalPackages() {
 }
 
 function getInstalledTools() {
-  tools=(git curl jq file unzip make gcc ffmpeg g++ python3 pip3 libtoolize npm convert)
+  tools=(git curl jq file unzip make gcc ffmpeg g++ python3 pip3 libtoolize npm)
 
   installed_list=""
+
+  # Pastikan PATH lengkap
+  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
   for tool in "${tools[@]}"; do
     if type -P "$tool" >/dev/null 2>&1; then
@@ -72,6 +75,13 @@ function getInstalledTools() {
       installed_list+="$tool ✗  "
     fi
   done
+
+  # Cek ImageMagick khusus
+  if type -P convert >/dev/null 2>&1 || type -P magick >/dev/null 2>&1; then
+    installed_list+="convert ✓  "
+  else
+    installed_list+="convert ✗  "
+  fi
 }
 
 # function getInstalledTools() {
