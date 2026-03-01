@@ -61,12 +61,12 @@ function getTotalPackages() {
 }
 
 function getInstalledTools() {
-  tools=(git curl jq file unzip make gcc imagemagick ffmpeg g++ python3 python3-pip libtool npm)
+  tools=(git curl jq file unzip make gcc ffmpeg g++ python3 pip3 libtoolize npm convert)
 
   installed_list=""
 
   for tool in "${tools[@]}"; do
-    if command -v $tool >/dev/null 2>&1; then
+    if type -P "$tool" >/dev/null 2>&1; then
       installed_list+="$tool ✓  "
     else
       installed_list+="$tool ✗  "
