@@ -79,9 +79,9 @@ function getInstalledTools() {
   # Cek ImageMagick khusus
   for cmd in jq convert magick gm pip3; do
     if command -v $cmd >/dev/null 2>&1; then
-      installed_list+="$cmd ✓"
+      installed_list+="$cmd ✓  "
     else
-      installed_list+="$cmd ✗"
+      installed_list+="$cmd ✗  "
     fi
   done
 }
