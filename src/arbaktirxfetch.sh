@@ -61,7 +61,7 @@ function getTotalPackages() {
 }
 
 function getInstalledTools() {
-  tools=(git curl jq file unzip make gcc ffmpeg g++ python3 pip3 libtoolize npm)
+  tools=(git curl file unzip make gcc ffmpeg g++ python3 libtoolize npm)
 
   installed_list=""
 
@@ -77,11 +77,13 @@ function getInstalledTools() {
   done
 
   # Cek ImageMagick khusus
-  if type -P convert >/dev/null 2>&1 || type -P magick >/dev/null 2>&1; then
-    installed_list+="convert ✓  "
-  else
-    installed_list+="convert ✗  "
-  fi
+  for cmd in jq convert magick gm pip3; do
+    if command -v $cmd >/dev/null 2>&1; then
+      installed_list += "$cmd ✓"
+    else
+      installed_list += "$cmd ✗"
+    fi
+  done
 }
 
 # function getInstalledTools() {
